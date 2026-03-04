@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas - Futbol Stats</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gradient-to-br from-green-50 to-blue-50">
+    <!-- Navegación (copiar la misma de index.html, actualizando el active) -->
+    <nav class="bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg">
+        <div class="container mx-auto px-4 sm:px-6 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <h1 class="text-xl sm:text-2xl font-bold flex items-center">
+                        <i class="fas fa-futbol mr-2 text-yellow-300"></i>
+                        <span class="hidden xs:inline">Futbol Stats Pro</span>
+                        <span class="xs:hidden">FSP</span>
+                    </h1>
+                </div>
+
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-2 lg:space-x-4">
+                    <a href="index.html" class="hover:bg-green-500 hover:bg-opacity-30 px-3 py-2 rounded-lg transition flex items-center">
+                        <i class="fas fa-home mr-1"></i>Inicio
+                    </a>
+                    <a href="equipos.html" class="hover:bg-green-500 hover:bg-opacity-30 px-3 py-2 rounded-lg transition flex items-center">
+                        <i class="fas fa-shield-alt mr-1"></i>Equipos
+                    </a>
+                    <a href="jugadores.html" class="hover:bg-green-500 hover:bg-opacity-30 px-3 py-2 rounded-lg transition flex items-center">
+                        <i class="fas fa-users mr-1"></i>Jugadores
+                    </a>
+                    <a href="partidos.html" class="hover:bg-green-500 hover:bg-opacity-30 px-3 py-2 rounded-lg transition flex items-center">
+                        <i class="fas fa-calendar-alt mr-1"></i>Partidos
+                    </a>
+                    <a href="estadisticas.html" class="hover:bg-green-500 hover:bg-opacity-30 px-3 py-2 rounded-lg transition flex items-center bg-green-500 bg-opacity-30">
+                        <i class="fas fa-chart-bar mr-1"></i>Estadísticas
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-2">
+                    <button onclick="exportarDatos()" class="bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-lg text-sm font-semibold transition flex items-center">
+                        <i class="fas fa-download mr-1"></i>Exportar
+                    </button>
+                    <button onclick="document.getElementById('importFile').click()" class="bg-purple-500 hover:bg-purple-600 px-3 py-2 rounded-lg text-sm font-semibold transition flex items-center">
+                        <i class="fas fa-upload mr-1"></i>Importar
+                    </button>
+                    <input type="file" id="importFile" class="hidden" accept=".json" onchange="importarDatos(this)">
+                </div>
+            </div>
+
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-2 space-y-2">
+                <!-- Mismo menú móvil de los otros archivos -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">Estadísticas Completas</h2>
+
+        <!-- Tabla de posiciones -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8 overflow-x-auto">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-list-ol text-green-600 mr-3"></i>
+                Tabla de Posiciones
+            </h3>
+            <table class="w-full min-w-[800px]">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pos</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Equipo</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">PJ</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">PG</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">PE</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">PP</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">GF</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">GC</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">DIF</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">PTS</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-posiciones" class="divide-y divide-gray-200">
+                    <!-- Se llena con JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Goleadores y Asistentes -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Goleadores -->
+            <div class="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-fire text-orange-500 mr-3"></i>
+                    Máximos Goleadores
+                </h3>
+                <table class="w-full min-w-[600px]">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pos</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jugador</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Equipo</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Goles</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Partidos</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Promedio</th>
+                        </tr>
+                    </thead>
+                    <tbody id="goleadores-container" class="divide-y divide-gray-200">
+                        <!-- Se llena con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Asistentes -->
+            <div class="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-hands-helping text-blue-500 mr-3"></i>
+                    Máximos Asistentes
+                </h3>
+                <table class="w-full min-w-[600px]">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pos</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jugador</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Equipo</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Asistencias</th>
+                        </tr>
+                    </thead>
+                    <tbody id="asistentes-container" class="divide-y divide-gray-200">
+                        <!-- Se llena con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/estadisticas.js"></script>
+</body>
+</html>

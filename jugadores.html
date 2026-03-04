@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jugadores - Futbol Stats</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gradient-to-br from-green-50 to-blue-50">
+    <!-- Navegación (copiar la misma de index.html) -->
+    <nav class="bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg">
+        <div class="container mx-auto px-4 sm:px-6 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <h1 class="text-xl sm:text-2xl font-bold flex items-center">
+                        <i class="fas fa-futbol mr-2 text-yellow-300"></i>
+                        <span class="hidden xs:inline">Futbol Stats Pro</span>
+                        <span class="xs:hidden">FSP</span>
+                    </h1>
+                </div>
+
+                <!-- Botón de menú móvil -->
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+
+                <!-- Navegación desktop -->
+                <div class="hidden md:flex items-center space-x-2 lg:space-x-4">
+                    <a href="index.html" class="hover:bg-green-500 hover:bg-opacity-30 px-3 py-2 rounded-lg transition flex items-center">
+                        <i class="fas fa-home mr-1"></i>Inicio
+                    </a>
+                    <a href="equipos.html" class="hover:bg-green-500 hover:bg-opacity-30 px-3 py-2 rounded-lg transition flex items-center">
+                        <i class="fas fa-shield-alt mr-1"></i>Equipos
+                    </a>
+                    <a href="jugadores.html" class="hover:bg-green-500 hover:bg-opacity-30 px-3 py-2 rounded-lg transition flex items-center bg-green-500 bg-opacity-30">
+                        <i class="fas fa-users mr-1"></i>Jugadores
+                    </a>
+                    <a href="partidos.html" class="hover:bg-green-500 hover:bg-opacity-30 px-3 py-2 rounded-lg transition flex items-center">
+                        <i class="fas fa-calendar-alt mr-1"></i>Partidos
+                    </a>
+                    <a href="estadisticas.html" class="hover:bg-green-500 hover:bg-opacity-30 px-3 py-2 rounded-lg transition flex items-center">
+                        <i class="fas fa-chart-bar mr-1"></i>Estadísticas
+                    </a>
+                </div>
+
+                <!-- Botones exportar/importar -->
+                <div class="hidden md:flex items-center space-x-2">
+                    <button onclick="exportarDatos()" class="bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-lg text-sm font-semibold transition flex items-center">
+                        <i class="fas fa-download mr-1"></i>Exportar
+                    </button>
+                    <button onclick="document.getElementById('importFile').click()" class="bg-purple-500 hover:bg-purple-600 px-3 py-2 rounded-lg text-sm font-semibold transition flex items-center">
+                        <i class="fas fa-upload mr-1"></i>Importar
+                    </button>
+                    <input type="file" id="importFile" class="hidden" accept=".json" onchange="importarDatos(this)">
+                </div>
+            </div>
+
+            <!-- Menú móvil -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-2 space-y-2">
+                <a href="index.html" class="block hover:bg-green-500 hover:bg-opacity-30 px-4 py-2 rounded-lg transition">
+                    <i class="fas fa-home mr-2"></i>Inicio
+                </a>
+                <a href="equipos.html" class="block hover:bg-green-500 hover:bg-opacity-30 px-4 py-2 rounded-lg transition">
+                    <i class="fas fa-shield-alt mr-2"></i>Equipos
+                </a>
+                <a href="jugadores.html" class="block hover:bg-green-500 hover:bg-opacity-30 px-4 py-2 rounded-lg transition">
+                    <i class="fas fa-users mr-2"></i>Jugadores
+                </a>
+                <a href="partidos.html" class="block hover:bg-green-500 hover:bg-opacity-30 px-4 py-2 rounded-lg transition">
+                    <i class="fas fa-calendar-alt mr-2"></i>Partidos
+                </a>
+                <a href="estadisticas.html" class="block hover:bg-green-500 hover:bg-opacity-30 px-4 py-2 rounded-lg transition">
+                    <i class="fas fa-chart-bar mr-2"></i>Estadísticas
+                </a>
+                <div class="flex space-x-2 pt-2">
+                    <button onclick="exportarDatos()" class="flex-1 bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-lg text-sm font-semibold transition">
+                        <i class="fas fa-download mr-1"></i>Exportar
+                    </button>
+                    <button onclick="document.getElementById('importFileMobile').click()" class="flex-1 bg-purple-500 hover:bg-purple-600 px-3 py-2 rounded-lg text-sm font-semibold transition">
+                        <i class="fas fa-upload mr-1"></i>Importar
+                    </button>
+                    <input type="file" id="importFileMobile" class="hidden" accept=".json" onchange="importarDatos(this)">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Gestión de Jugadores</h2>
+            <button onclick="abrirModal('nuevo')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition flex items-center">
+                <i class="fas fa-plus mr-2"></i>Nuevo Jugador
+            </button>
+        </div>
+
+        <div id="jugadores-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Se llena con JavaScript -->
+        </div>
+    </div>
+
+    <!-- Modal para nuevo/editar jugador -->
+    <div id="modalJugador" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full">
+            <h3 id="modalTitulo" class="text-2xl font-bold mb-6">Agregar Nuevo Jugador</h3>
+            <form id="formJugador">
+                <input type="hidden" id="jugador_id">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Nombre del jugador *</label>
+                        <input type="text" id="nombre" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-green-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Equipo *</label>
+                        <select id="equipo_id" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-green-500">
+                            <option value="">Seleccionar equipo</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Posición</label>
+                        <select id="posicion" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-green-500">
+                            <option value="">Seleccionar posición</option>
+                            <option value="Portero">Portero</option>
+                            <option value="Defensa">Defensa</option>
+                            <option value="Mediocampista">Mediocampista</option>
+                            <option value="Delantero">Delantero</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Número</label>
+                        <input type="number" id="numero" min="1" max="99" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-green-500">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" onclick="cerrarModal()" class="px-6 py-2 border rounded-lg hover:bg-gray-100">Cancelar</button>
+                    <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para registrar evento -->
+    <div id="modalEvento" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full">
+            <h3 class="text-2xl font-bold mb-6">Registrar Evento</h3>
+            <form id="formEvento">
+                <input type="hidden" id="evento_jugador_id">
+                <input type="hidden" id="evento_tipo">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Partido</label>
+                        <select id="evento_partido_id" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-green-500">
+                            <option value="">Seleccionar partido</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Minuto</label>
+                        <input type="number" id="evento_minuto" min="0" max="120" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-green-500">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" onclick="cerrarModalEvento()" class="px-6 py-2 border rounded-lg hover:bg-gray-100">Cancelar</button>
+                    <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Registrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/jugadores.js"></script>
+</body>
+</html>
